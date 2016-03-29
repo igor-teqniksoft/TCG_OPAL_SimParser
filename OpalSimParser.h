@@ -86,7 +86,7 @@ typedef struct _TOKEN_
 } TOKEN;
 
 
-#define GetDataPayload(buf)		((uint8_t*)(buf + sizeof(COM_PACKET) + sizeof(PACKET) + sizeof(DATA_SUB_PACKET)))
+#define GetDataPayload(buf)     ((uint8_t*)(buf + sizeof(COM_PACKET) + sizeof(PACKET) + sizeof(DATA_SUB_PACKET)))
 
 uint64_t ChangeEndianness_U64(uint64_t);
 uint32_t ChangeEndianness_U32(uint32_t);

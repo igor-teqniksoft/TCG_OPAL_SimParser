@@ -139,24 +139,24 @@ class CList
 template<class T>
 void CList<T>::AddNode(T value)
 {
-        Node * p_nd = new Node;
-        p_nd->data = value;
+    Node * p_nd = new Node;
+    p_nd->data = value;
 
-        if(p_head == NULL) //if it was first added element
-        {
-            p_head = p_tail = p_nd;
-            p_nd->p_prev = NULL;
-            p_nd->p_next = NULL;
-        }
-        else //for not first element
-        {
-            p_nd->p_prev = p_tail;
-            p_nd->p_next = NULL;
-            p_tail->p_next = p_nd;
-            p_tail = p_nd;
-        }
+    if(p_head == NULL) //if it was first added element
+    {
+        p_head = p_tail = p_nd;
+        p_nd->p_prev = NULL;
+        p_nd->p_next = NULL;
+    }
+    else //for not first element
+    {
+        p_nd->p_prev = p_tail;
+        p_nd->p_next = NULL;
+        p_tail->p_next = p_nd;
+        p_tail = p_nd;
+    }
 
-        ++nodes_cnt;
+    ++nodes_cnt;
 }
 
 //*****************************************************************************

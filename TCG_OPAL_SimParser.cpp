@@ -136,13 +136,13 @@ int main()
         return 1;
     }
     memset(tcg_send_packet, 0x00, sizeof(TPer_Properties_req));
-	GetPayload(TPer_Properties_req, tcg_send_packet, sizeof(TPer_Properties_req)/sizeof(uint32_t));
+    GetPayload(TPer_Properties_req, tcg_send_packet, sizeof(TPer_Properties_req)/sizeof(uint32_t));
 
-	GetComPacket(tcg_send_packet, &com_packet);
-	GetPacket(tcg_send_packet, &packet);
-	GetDataSubPacket(tcg_send_packet, &data_sub_packet);
+    GetComPacket(tcg_send_packet, &com_packet);
+    GetPacket(tcg_send_packet, &packet);
+    GetDataSubPacket(tcg_send_packet, &data_sub_packet);
 
-	p_data_payload = GetDataPayload(tcg_send_packet);
+    p_data_payload = GetDataPayload(tcg_send_packet);
 
 //*****************************************************************************
 //Example for C++ parsing version
@@ -168,20 +168,18 @@ int main()
 
     GetToken(p_data_payload, &token);
 
-	switch(token.token_type)
-	{
-		case CALL:
-			if(!CallTokenHandler(p_data_payload + 1))
-			{
-			    printf("FAIL: Packet error \n");
+    switch(token.token_type)
+    {
+        case CALL:
+            if(!CallTokenHandler(p_data_payload + 1))
+            {
+                printf("FAIL: Packet error \n");
+            }
+            break;
 
-			}
-			break;
-
-		default:
+        default:
             printf("token %d \n", token.token_type);
+    }
 
-	}
-
-	free(tcg_send_packet);
+    free(tcg_send_packet);
 }

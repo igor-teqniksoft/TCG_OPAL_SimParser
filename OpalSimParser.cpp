@@ -57,54 +57,54 @@ uint64_t ChangeEndianness_U64(uint64_t value)
 //*****************************************************************************
 void GetToken(uint8_t *buf, TOKEN *token)
 {
-	if((buf[0] & START_LIST) != START_LIST) // we have atoms here
-	{
-		uint8_t sign_mask;
+    if((buf[0] & START_LIST) != START_LIST) // we have atoms here
+    {
+        uint8_t sign_mask;
 
-		if((buf[0] & LONG_ATOM) == LONG_ATOM) //it's long atom token
-		{
-			token->token_type = LONG_ATOM;
-			sign_mask = LONG_ATOM_SIGN_MASK;
-			token->token_lgth = LONG_ATOM_LENGTH;
-			token->data_lgth = (buf[1] << 16) | (buf[2] << 8) | (buf[3]);
-			token->buf = buf + LONG_ATOM_LENGTH;
-		}
-		else if((buf[0] & MEDIUM_ATOM) == MEDIUM_ATOM) //it's medium atom
-		{
-			token->token_type = MEDIUM_ATOM;
-			sign_mask = MEDIUM_ATOM_SIGN_MASK;
-			token->token_lgth = MEDIUM_ATOM_LENGTH;
-			token->data_lgth = ((buf[0] & (MEDIUM_ATOM_SIGN_MASK - 1)) << 8) | buf[1];
-			token->buf = buf + MEDIUM_ATOM_LENGTH;
-		}
-		else if((buf[0] & SHORT_ATOM) == SHORT_ATOM) //it's short atom
-		{
-			token->token_type = SHORT_ATOM;
-			sign_mask = SHORT_ATOM_SIGN_MASK;
-			token->token_lgth = SHORT_ATOM_LENGTH;
-			token->data_lgth = buf[0] & (SHORT_ATOM_SIGN_MASK - 1);
-			token->buf = buf + SHORT_ATOM_LENGTH;
-		}
-		else //it's tiny atom
-		{
-			token->token_type = TINY_ATOM;
-			token->token_lgth = TINY_ATOM_LENGTH;
-			token->data_lgth = 1;
-			sign_mask = TINY_ATOM_SIGN_MASK;
-			token->buf = buf;
-		}
+        if((buf[0] & LONG_ATOM) == LONG_ATOM) //it's long atom token
+        {
+            token->token_type = LONG_ATOM;
+            sign_mask = LONG_ATOM_SIGN_MASK;
+            token->token_lgth = LONG_ATOM_LENGTH;
+            token->data_lgth = (buf[1] << 16) | (buf[2] << 8) | (buf[3]);
+            token->buf = buf + LONG_ATOM_LENGTH;
+        }
+        else if((buf[0] & MEDIUM_ATOM) == MEDIUM_ATOM) //it's medium atom
+        {
+            token->token_type = MEDIUM_ATOM;
+            sign_mask = MEDIUM_ATOM_SIGN_MASK;
+            token->token_lgth = MEDIUM_ATOM_LENGTH;
+            token->data_lgth = ((buf[0] & (MEDIUM_ATOM_SIGN_MASK - 1)) << 8) | buf[1];
+            token->buf = buf + MEDIUM_ATOM_LENGTH;
+        }
+        else if((buf[0] & SHORT_ATOM) == SHORT_ATOM) //it's short atom
+        {
+            token->token_type = SHORT_ATOM;
+            sign_mask = SHORT_ATOM_SIGN_MASK;
+            token->token_lgth = SHORT_ATOM_LENGTH;
+            token->data_lgth = buf[0] & (SHORT_ATOM_SIGN_MASK - 1);
+            token->buf = buf + SHORT_ATOM_LENGTH;
+        }
+        else //it's tiny atom
+        {
+            token->token_type = TINY_ATOM;
+            token->token_lgth = TINY_ATOM_LENGTH;
+            token->data_lgth = 1;
+            sign_mask = TINY_ATOM_SIGN_MASK;
+            token->buf = buf;
+        }
 
-		if(buf[0] & sign_mask)
-		{
-			token->sign  = 1;
-		}
-	}
-	else //we have OPAL tokens here
-	{
-	    token->token_type = buf[0];
+        if(buf[0] & sign_mask)
+        {
+            token->sign  = 1;
+        }
+    }
+    else //we have OPAL tokens here
+    {
+        token->token_type = buf[0];
 	    token->sign = 0;
 	    token->token_lgth = 1;
-		token->data_lgth = 0;
+	    token->data_lgth = 0;
 		token->buf = buf;
 	}
 }
@@ -118,10 +118,10 @@ void GetComPacket(uint8_t *buf, COM_PACKET *packet)
 
     memset(packet, 0, sizeof(COM_PACKET));
 
-	packet->ExComID         = ChangeEndianness_U32(tmp->ExComID);
-	packet->OutstandingData = ChangeEndianness_U32(tmp->OutstandingData);
-	packet->MinTransfer	    = ChangeEndianness_U32(tmp->MinTransfer);
-	packet->Length          = ChangeEndianness_U32(tmp->Length);
+    packet->ExComID         = ChangeEndianness_U32(tmp->ExComID);
+    packet->OutstandingData = ChangeEndianness_U32(tmp->OutstandingData);
+    packet->MinTransfer	    = ChangeEndianness_U32(tmp->MinTransfer);
+    packet->Length          = ChangeEndianness_U32(tmp->Length);
 }
 
 //*****************************************************************************
@@ -202,19 +202,19 @@ uint8_t GetUint8(TOKEN *token)
 //*****************************************************************************
 bool CallTokenHandler(uint8_t *source)
 {
-	TOKEN token;
-	uint32_t offset = 0;
-	uint8_t *buf = source;
+    TOKEN token;
+    uint32_t offset = 0;
+    uint8_t *buf = source;
 
-	GetToken(buf + offset, &token);
-	if(token.token_type == SHORT_ATOM && token.data_lgth == sizeof(uint64_t))
-	{
-	    invoking_uid = GetUint64(&token);
-	    offset += token.data_lgth + token.token_lgth; //iterator
-	}
-	else
-	{
-	    return false;
+    GetToken(buf + offset, &token);
+    if(token.token_type == SHORT_ATOM && token.data_lgth == sizeof(uint64_t))
+    {
+        invoking_uid = GetUint64(&token);
+        offset += token.data_lgth + token.token_lgth; //iterator
+    }
+    else
+    {
+        return false;
     }
 
     GetToken(buf + offset, &token);
